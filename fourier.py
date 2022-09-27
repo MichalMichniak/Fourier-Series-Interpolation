@@ -32,8 +32,10 @@ def IDFT(F,dF):
         result.append(np.sum(F[:]*np.exp(k*np.array([i for i in range(-N//2,N//2)])*1j*2*np.pi/N)))
     return 1/N * np.array(result),Td
 
-def four(res):
+def four():
+    ### get samples:
     res = sampling.start_window()
+
     dft,F = DFT(res,1)
     N = len(res)#
     w = [((i)*F)*2*np.pi for i in range(-N//2,N//2)]
@@ -51,6 +53,9 @@ def four(res):
     lst = sorted(lst,key= lambda x: x[0])[::-1]
     lst = list(zip(*lst))
     #output.start_window(M,w,phi,[(x,y)for x,y in zip(list(np.real(idft)+200),list(np.imag(idft)+250))])
+
+    # visualisation:
+    ## no need to pass idft better to pass just points directly but i wanted to check the correctness of idft (scale of sampling etc.)
     output.start_window(lst[0],lst[1],lst[2],[(x,y)for x,y in zip(list(np.real(idft)+200),list(np.imag(idft)+250))])
     
     pass

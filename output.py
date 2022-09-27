@@ -16,29 +16,65 @@ class Part:
         pass
 
     def update(self,d):
+        """
+        update angle
+        """
         self.angle += self.omega*d
 
     def get_vect(self):
+        """
+        get (x,y) coordinates of vector
+        """
         return self.amplitude*np.cos(self.angle),self.amplitude*np.sin(self.angle)
     
 class Body:
     def __init__(self,x_,y_) -> None:
+        """
+        init of vector chain
+
+        args:
+            x_ : float - x coordinate of middle-point of symulatet rotating vector chain
+            y_ : float - y coordinate of middle-point of symulatet rotating vector chain
+        """
         self.part_lst : List[Part]= []
         self.x = x_
         self.y = y_
         pass
 
     def add_part(self, part : Part):
+        """
+        add vector to chain
+
+        args:
+            part : Part - new vector
+        """
         self.part_lst.append(part)
         pass
 
     def add_part(self, amplitude_,omega_,angle_):
+        """
+        add vector to chain
+
+        args:
+            amplitude_ : float - amplitude of new vector
+            omega_ : float - angular velocity of vector
+            angle_ : float - initial condition of angle
+        """
         self.part_lst.append(Part(amplitude_,omega_,angle_))
 
     def update(self, d):
+        """
+        update state of whole vector chain
+
+        args:
+            d : float - delta of time
+        """
         for i in self.part_lst: i.update(d)
 
     def get_coords(self):
+        """
+        get the position of the nodes in chain
+        """
         temp = []
         temp.append((self.x,self.y))
         for i in self.part_lst:
@@ -50,10 +86,14 @@ class State_of_window(enum.Enum):
     symulation = 1
     drawing = 2
 def start_window(M,w,phi,x_positions):
+    """
+    Main Visualization window function
+    """
     pg.init()
     win = pg.display.set_mode((1000,500))
     pg.display.set_caption("Visualization")
     run = True
+    # parameters of symulation
     main_body = Body(200,250)
     T = 1
     sampling_iter = 0
@@ -61,40 +101,24 @@ def start_window(M,w,phi,x_positions):
     w0 = 4
     A = 50
     speed = 0.01
-    ## aby odczytywać cos faza +np.pi/2
-    ## aby odczytywać sin faza +0
-    ## sygnał trójkątny bipolarny
-    """
-    for i in range(0,20):
-        main_body.add_part((A*2/np.pi)/(1+i),(1+i)*w0,0)#+np.pi/2
-    """
-    ## sygnał prostokąty:
 
-    # for i in range(0,10):
-    #     main_body.add_part((A*4/np.pi)/(1+2*i),(1+2*i)*w0,0)
-
-    ##
     for i in range(len(M)):
         main_body.add_part(M[i],w[i],phi[i])
-
-
-
-
+    
     state = State_of_window.symulation
     k = (width+2, main_body.get_coords()[-1][1])
     arr = np.array([k for i in range(1500)])
     arr_samples = np.array([k for i in range(3000)])
     arr2 = np.array([main_body.get_coords()[-1] for i in range(3000)])
     while run:
-        # obsługa zdarzeń 
+        # event handling
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 run = False
-            
-        #############count DFT
 
-        #############Obiekty 
+        # objects update calculatins
         win.fill((0,0,0))
+        # for future merge sampling and visualization in one window
         if(state == State_of_window.symulation):
             main_body.update(speed)
             if sampling_iter2 == 2:

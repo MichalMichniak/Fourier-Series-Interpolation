@@ -17,7 +17,7 @@ def start_window():
     run = True
     lst_of_objects = []
     while run:
-        # obsługa zdarzeń 
+        # event handling 
         for event in pg.event.get():
             # print(event)
             if event.type == pg.QUIT:
@@ -31,9 +31,9 @@ def start_window():
                         t = False
                 if t:
                     lst_of_objects.append(pg.mouse.get_pos())
-        #############Obiekty 
+        # display section
         win.fill((0,0,0))
-        ############ display
+        # objects:
         for i in lst_of_objects:
             pg.draw.circle(win,(255,0,0),i,5)
         pg.display.update()
