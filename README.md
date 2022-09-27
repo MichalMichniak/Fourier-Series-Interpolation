@@ -10,4 +10,5 @@ interpolation of closed cyclic path on 2D plane using Fourier series.
 
 # How it works
 
-
+program treat the sampled points as complex (x - real part, y - imaginary part) values in time domain where sampling rate is constant. So it use the DFT to map complex vector of values to complex vector which is a result of DFT. Then it splits each value to its module and phase and corresponding pulsation.
+This gives every needed value to simulate each set of values (as a vector with rotation speed). Visualization part only joins those vectors in one chain and symulate it.
